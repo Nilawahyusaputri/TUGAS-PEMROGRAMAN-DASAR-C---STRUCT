@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
 using namespace std;
 
 struct studentType {
@@ -9,17 +10,29 @@ struct studentType {
     char grade;
 };
 
+// Fungsi membaca data mahasiswa
 void readStudents(studentType arr[], int n) {
+    cout << "==========================================" << endl;
+    cout << "     INPUT DATA NILAI MAHASISWA" << endl;
+    cout << "==========================================" << endl;
     for (int i = 0; i < n; ++i) {
-        cout << "Nama depan mahasiswa ke-" << i + 1 << ": ";
+        cout << "\nMahasiswa ke-" << i + 1 << endl;
+        cout << "Nama depan   : ";
         cin >> arr[i].studentFName;
-        cout << "Nama belakang mahasiswa ke-" << i + 1 << ": ";
+        cout << "Nama belakang: ";
         cin >> arr[i].studentLName;
         cout << "Nilai (0–100): ";
         cin >> arr[i].testScore;
+        
+        // Validasi agar nilai antara 0–100
+        while (arr[i].testScore < 0 || arr[i].testScore > 100) {
+            cout << "Nilai tidak valid! Masukkan ulang (0–100): ";
+            cin >> arr[i].testScore;
+        }
     }
 }
 
+// Fungsi menentukan grade dari nilai
 char scoreToGrade(int score) {
     if (score >= 90) return 'A';
     else if (score >= 80) return 'B';
@@ -28,11 +41,13 @@ char scoreToGrade(int score) {
     else return 'F';
 }
 
+// Fungsi mengisi grade tiap mahasiswa
 void assignGrades(studentType arr[], int n) {
     for (int i = 0; i < n; ++i)
         arr[i].grade = scoreToGrade(arr[i].testScore);
 }
 
+// Fungsi mencari nilai tertinggi
 int findHighestScore(studentType arr[], int n) {
     int highest = arr[0].testScore;
     for (int i = 1; i < n; ++i)
@@ -41,20 +56,32 @@ int findHighestScore(studentType arr[], int n) {
     return highest;
 }
 
+// Fungsi menampilkan mahasiswa dengan nilai tertinggi
 void printTopScorers(studentType arr[], int n, int highest) {
-    cout << "\nNilai tertinggi = " << highest << endl;
-    cout << "Mahasiswa dengan nilai tertinggi:" << endl;
+    cout << "\n==========================================" << endl;
+    cout << "       MAHASISWA DENGAN NILAI TERTINGGI" << endl;
+    cout << "==========================================" << endl;
+    cout << "Nilai tertinggi : " << highest << endl;
+    cout << "Nama Mahasiswa  :" << endl;
     for (int i = 0; i < n; ++i)
         if (arr[i].testScore == highest)
-            cout << arr[i].studentFName << " " << arr[i].studentLName << endl;
+            cout << "- " << arr[i].studentFName << " " << arr[i].studentLName << endl;
 }
 
+// Fungsi menampilkan seluruh data mahasiswa
 void printAll(studentType arr[], int n) {
-    cout << "\nDaftar Nilai Mahasiswa:" << endl;
+    cout << "\n==========================================" << endl;
+    cout << "            DAFTAR NILAI MAHASISWA" << endl;
+    cout << "==========================================" << endl;
+    cout << left << setw(20) << "Nama"
+         << setw(10) << "Nilai"
+         << setw(8) << "Grade" << endl;
+    cout << "------------------------------------------" << endl;
+
     for (int i = 0; i < n; ++i)
-        cout << arr[i].studentFName << " " << arr[i].studentLName
-             << "  Nilai: " << arr[i].testScore
-             << "  Grade: " << arr[i].grade << endl;
+        cout << left << setw(20) << (arr[i].studentFName + " " + arr[i].studentLName)
+             << setw(10) << arr[i].testScore
+             << setw(8) << arr[i].grade << endl;
 }
 
 int main() {
@@ -68,6 +95,10 @@ int main() {
 
     printAll(students, N);
     printTopScorers(students, N, highest);
+
+    cout << "\n==========================================" << endl;
+    cout << "Program selesai. Terima kasih!" << endl;
+    cout << "==========================================" << endl;
 
     return 0;
 }
